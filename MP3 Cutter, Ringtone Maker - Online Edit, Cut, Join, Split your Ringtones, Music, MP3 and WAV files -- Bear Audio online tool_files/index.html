@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- saved from url=(0145)https://s0.2mdn.net/ads/richmedia/studio/pv2/61238491/20190918042521096/index.html?e=69&leftOffset=0&topOffset=0&c=d4naFR4FuE&t=1&renderingType=2 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<style type="text/css">.do {
+					display:block;
+					position:absolute;
+					visibility:inherit;
+					overflow:visible;
+					-moz-transform:matrix(1, 0, 0, 1, 0, 0);-ms-transform:matrix(1, 0, 0, 1, 0, 0);-o-transform:matrix(1, 0, 0, 1, 0, 0);-webkit-transform:matrix(1, 0, 0, 1, 0, 0);transform:matrix(1, 0, 0, 1, 0, 0);
+					-moz-transform-origin:0px 0px;-ms-transform-origin:0px 0px;-o-transform-origin:0px 0px;-webkit-transform-origin:0px 0px;transform-origin:0px 0px;
+					-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+												 
+				}
+				#root{perspective:1844.142822265625px;-webkit-perspective:1844.142822265625px;-moz-perspective:1844.142822265625px;perspective-origin:960px 541px;-webkit-perspective-origin:960px 541px;-moz-perspective-origin:960px 541px;-webkit-transform:rotateZ(0.00001deg);-moz-transform:rotateZ(0.00001deg);-ms-transform:rotateZ(0.00001deg);-o-transform:rotateZ(0.00001deg);transform:rotateZ(0.00001deg);}</style>   
+	<script type="text/javascript">
+		/* timings */ 
+		var __start = Date.now();
+		var __last = __start;
+		function timedLog(message)
+		{
+			var now = Date.now();
+			console.log("-------------" + message + "...........", (now - __start), now - __last); //COMMENT OUT THIS IN LIVE 
+			__last = now;
+		}
+		
+		timedLog("BASED AD LOADING");
+
+	</script>
+	<script src="./Enabler_01_238.js"></script>
+	<script type="text/javascript">
+		
+		_ad = {};
+		//MUST SET THESE - per campaign
+		//=========================================
+
+		//campaign-wide profile ID
+		Enabler.setProfileId(10483528); 
+		//list of all the exit names your dynamic content will call
+		function dummyExits(){ 
+			Enabler.exit('default');
+			Enabler.exit('intro');
+			Enabler.exit('endscreen');
+			Enabler.exit('exit1');
+			Enabler.exit('exit2');
+			Enabler.exit('exit3');
+			Enabler.exit('exit4');
+			Enabler.exit('exit5');
+			Enabler.exit('exit6');	
+			Enabler.exit('exit7');
+			Enabler.exit('exit8');
+			Enabler.exit('exit9');
+			Enabler.exit('exit10');		
+		}
+
+		//faaisafe backup URL when no dc avalaible
+		var backupExitURL = "https://www.diy.com/"; //if no DC action this clickthrough will have to do
+
+		//=========================================
+
+		// DO NOT EDIT BELOW HERE
+		var WID = window.innerWidth;
+		var HEI = window.innerHeight;
+		var dc;
+		var isLocal = window.location.protocol === "file:" || window.location.hostname == "localhost";
+		var globalAssetDir = "dir_global";// the global assets directory field in the profile feed must match this
+
+
+		//Initialize Enabler
+		Enabler.isInitialized() ? init() : Enabler.addEventListener(studio.events.StudioEvent.INIT, init);
+		//Run when Enabler is ready
+		function init(){
+				timedLog("ENABLE INIT");
+			//local or preview
+			if(typeof dynamicContent == 'undefined')
+			{
+				if(isLocal == false)
+				{
+					injectBackup();
+					return;
+				}		
+			}else{
+				//find profile name in dynamic content and set global dc var
+				for (var prop in dynamicContent) {
+		        	if(!dynamicContent.hasOwnProperty(prop)) continue;
+		        	if(prop.toLowerCase().indexOf("_content") != -1)
+		        	{
+		        		dc = dynamicContent[prop][0];
+		        		break;
+		        	}
+	    		}	
+				if(!dc)
+				{
+					injectBackup();
+					return;
+				}
+			}
+
+			//not returned... dynamic content must be available so go get it			
+			loadJS(getGlobalAssetPath("bootstrap.js"),function(){});
+		}
+	
+		
+		function getGlobalAssetPath(filename){
+			console.log("getGlobalAssetPath:   "+filename);
+			if(isLocal)
+			{
+				return "_global/"+filename;
+			}else{
+				return dc[globalAssetDir][filename].Url; 
+			}
+		}
+
+
+
+		function loadJS(src, callback) {
+			console.log("loadJS:   "+src,callback);
+			if (typeof src === 'string') {
+				var s = document.createElement('script');
+				s.src = src;
+				s.async = true;
+				s.onreadystatechange = s.onload = function() {
+					var state = s.readyState;
+					if (!callback[src] && (!state || /loaded|complete/.test(state))) {
+						callback[src] = true;
+						callback();
+					}
+				};
+				document.getElementsByTagName('head')[0].appendChild(s);
+			}else if (src.length) {
+				var count = src.length;
+				for (var i = 0; i < src.length; i++) {
+					loadJS(src[i], function(){
+							if(--count == 0)callback();
+						}
+					);
+				};
+			}
+		}
+
+
+		function injectBackup()
+		{
+			var a = document.createElement("img");
+  			a.src = a.shortSrc = "backup_"+WID+"x"+HEI+".jpg";
+  			document.getElementById('content_dc').appendChild(a);
+  			document.getElementById('content_dc').style.cursor = "pointer";
+  			document.getElementById('content_dc').addEventListener('click',onClick_Backup);
+		}
+
+		function onClick_Backup()
+		{
+			Enabler.exitOverride('default',backupExitURL);
+		}
+	</script>
+<script src="./15584_20190915051031723_bootstrap.js" async=""></script><script src="./15584_20190315025141892_fbf.js" async=""></script></head>
+<body style="margin:0;padding:0">
+<svg id="svg_defs" style="position:absolute">
+<defs id="defs_global"></defs>
+</svg>
+  <div id="content_dc" style="overflow: hidden; position: absolute; top: 0px; left: 0px; margin: auto; display: block; cursor: pointer;"><img src="./15584_20191002111638350_proj_stat_wav1_300x250.jpg" width="300" height="250"></div>
+
+</body></html>
